@@ -1,0 +1,96 @@
+//1. Napisać funkcję odnajdującą maksimum z przekazanej listy obiektów (liczb, napisów) i zwracającą wartość maksymalną oraz pozycje (indeksy) listy na których ta wartość się znajduje. 
+//Użyć konstrukcji  eachWithIndex.
+
+static def maximum(list){
+    def maxValue = list.indexOf(0)
+    list.eachWithIndex{
+        it, i -> {
+            if(maxValue < it)
+                maxValue = it
+        }
+    }
+    def indList = list.findIndexValues {it == maxValue}
+    return ([maxValue, indList])
+}
+
+def list = ['a', 'c', 'c', 'c', 'b']
+(maxVal, indList) = maximum(list)
+println "Maximum: $maxVal"
+println "Indexes: $indList"
+
+//2. Napisać funkcję List getInts(), która prosi o podanie szeregu liczb całkowitych w dialogu wejściowym i zwraca listę wprowadzonych liczb (jako obiektów typu Integer).
+//Nie dopuścić do wprowadzenia wadliwych danych (ponowienie dialogu do poprawki).
+
+static def getInts(){
+    def flag = 0
+    while(flag == 0){
+        println('Wprowadz liczby rozdzielone spacjami')
+        def line = System.in.newReader().readLine()
+        try{
+            def list = line.split(' ').collect{it as int}
+            flag = 1
+            return list
+        }catch(Exception e){
+            println(e)
+        }
+    }
+}
+
+def list = getInts()
+print(list)
+
+//3. Napisać funkcję List apply(List l, Closure c), która każdy element listy l transformuje za pomocą domknięcie c i zwraca listę transformowanych wartości. 
+//Przetestować dla różnych list i różnych domknięć
+
+static def aply(list, closure){
+    def newList = []
+    list.eachWithIndex{
+        it, i -> {
+            newList.add(closure(it))
+        }
+    }
+    return (newList)
+}
+
+def list = ['a', 'c', 'c', 'c', 'b']
+def list2 = [5, 3, 5, 5, 1, 5]
+def add = { x -> return x + 1 }
+def mul = { x -> return x*2 }
+println(aply(list2, add))
+println(aply(list, add))
+println(aply(list2, mul))
+println(aply(list, mul))
+
+//4. Uogólnić funkcję z zadania 2, tak by wprowadzane mogły być dowolne liczby i słowa (napisy rozdzielone białymi znakami), 
+//a ich poprawność weryfikowana za pomocą przekazanego funkcji domknięcia.
+
+
+static def getData(Class clazz = String, closure){
+    def flag = 0
+    def acceptFlag = 0
+    while(flag == 0){
+        acceptFlag = 0
+        println('Wprowadz dane rozdzielone spacjami')
+        def line = System.in.newReader().readLine()
+        try{
+            def list = line.split(' ')*.asType(clazz)
+            list.each {
+                println(it)
+                if(!closure(it)){
+                    acceptFlag = 1
+                }
+            }
+            if(acceptFlag == 0){
+                flag = 1
+                return list
+            }
+        }catch(Exception e){
+            println(e)
+        }
+    }
+}
+
+def closure1 = {it > 3}
+println(getData(Integer, closure1) )
+def closure2 = {it.size() > 3}
+println(getData(closure2))
