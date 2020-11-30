@@ -1,0 +1,36 @@
+//Napisać pogram przekształcający liczby na ich słowne odpowiedniki. Np. po wprowadzeniu liczby 147 winniśmy uzyskać jeden - cztery - siedem. (5)
+
+static def numbersFunction( number){
+    switch(number){
+        case '0':
+            return 'zero '
+        case '1':
+            return 'jeden '
+        case '2':
+            return 'dwa '
+        case '3':
+            return 'trzy '
+        case '4':
+            return 'cztery '
+        case '5':
+            return 'piec '
+        case '6':
+            return 'szesc '
+        case '7':
+            return 'siedem '
+        case '8':
+            return 'osiem '
+        case '9':
+            return 'dziewiec '
+        default:
+            return 'ups'
+    }
+}
+
+println 'what is your number?'
+def number = System.in.newReader().readLine()
+print 'Your number is '
+int size = number.length()
+for(int i=0; i<size; i++){
+    print numbersFunction(number.charAt(i))
+}
