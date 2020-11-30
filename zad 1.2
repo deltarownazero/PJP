@@ -1,0 +1,72 @@
+//Napisy wprowadzane w kolejnych dialogach mają formę: pozycja = koszt. Zsumuj wszystkie koszty dla tych samych pozycji (np. mleko, chleb). (5)
+
+def myCart = [:]
+
+static def addNewProduct(product, price, myCart){
+    myCart.put(product, price)
+    return myCart
+}
+
+static def updateCart(product, price, myCart){
+    int oldPrice = myCart.get(product)
+    myCart.put(product, price + oldPrice)
+    return myCart
+}
+
+def addToCart(x, myCart){
+    int price = getPrice(x)
+    println price
+    String product = getProduct(x)
+    println product
+    if(myCart.containsKey(product)){
+        updateCart(product, price, myCart)
+    }else{
+        addNewProduct(product, price, myCart)
+    }
+    return myCart
+}
+
+static def getProduct(x){
+    int flag = 0
+    int i=0
+    String product = ''
+    while (i < x.length()){
+        if(x.charAt(i) == '=')
+            flag = 1
+        else{
+            if(x.charAt(i) != ' ' && flag != 1){
+                String strnumber = x.charAt(i)
+                product = product + strnumber
+            }
+        }
+        i++
+    }
+    return product
+}
+
+static int getPrice(String x){
+    int price = 0
+    int flag = 0
+    int i=0
+    while (i < x.length()){
+        if(x.charAt(i) == '='){
+            flag = 1
+        }
+        else{
+            if(x.charAt(i) != ' ' && flag == 1){
+                String strnumber = x.charAt(i)
+                price = price*10 + Integer.parseInt(strnumber)
+            }
+        }
+        i++
+    }
+    return price
+}
+
+while(1){
+    println 'next please'
+    def x = System.in.newReader().readLine()
+    addToCart(x, myCart)
+    println myCart
+
+}
